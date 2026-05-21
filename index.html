@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY LCARS BLOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: #FF9900;
+            font-family: 'Antonio', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* STRUTTURA FRAME LCARS LATERALE */
+        .lcars-left {
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            background-color: transparent;
+            margin-top: 25px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .lcars-block {
+            height: 45px;
+            margin-bottom: 8px;
+            color: black;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 45px;
+            padding-right: 15px;
+            text-align: right;
+            border-radius: 0 15px 15px 0;
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .lcars-block:hover {
+            filter: brightness(1.3);
+            padding-right: 25px;
+        }
+
+        .lcars-curve-joint {
+            background-color: #9999FF;
+            height: 60px;
+            border-radius: 0 70px 0 0;
+            margin-bottom: -15px;
+        }
+
+        /* Palette Colori Standard LCARS */
+        .color-orange { background-color: #FF9900; }
+        .color-purple { background-color: #CC99CC; }
+        .color-yellow { background-color: #FFCC33; }
+        .color-blue   { background-color: #9999FF; }
+        .color-pink   { background-color: #FF9999; }
+
+        /* CONTENITORE PRINCIPALE ESPANSO A TUTTO SCHERMO */
+        .main-frame {
+            flex-grow: 1;
+            padding: 40px;
+            border-left: 20px solid #9999FF;
+            border-top: 45px solid #9999FF;
+            border-top-left-radius: 70px;
+            margin-top: 25px;
+            box-sizing: border-box;
+            padding-bottom: 60px;
+            width: calc(100% - 150px);
+        }
+
+        .content {
+            margin-left: 15px;
+            width: 100%;
+        }
+
+        /* TITOLI ED INTESTAZIONI */
+        h1 { font-size: 3.5rem; color: #9999FF; margin: 0; letter-spacing: 3px; line-height: 1.1; text-transform: uppercase; }
+        .sub-title { color: #FFCC33; font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; }
+
+        /* CONTENITORE DINAMICO DEI POST */
+        #blog-posts-container {
+            width: 100%;
+        }
+
+        /* MODULO ARTICOLO */
+        .post {
+            background-color: #0c0c12;
+            border: 1px solid #333344;
+            padding: 30px;
+            margin-top: 35px;
+            margin-bottom: 35px;
+            border-radius: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .post h2 {
+            color: #9999FF;
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .post-meta {
+            color: #FFCC33;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .post p {
+            text-transform: none;
+            color: #FF9900;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            max-width: 1000px;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #222233;
+        }
+
+        .comments-link {
+            color: #9999FF;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* SEZIONE LIKE */
+        .like-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .like-count {
+            font-size: 1.1rem;
+            color: #CC99CC;
+            font-weight: bold;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            color: #FF9999;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-left: 8px;
+        }
+
+        .like-btn:hover { transform: scale(1.2); }
+        .like-btn.liked { color: #FFCC33; }
+
+        /* AREA COMMENTI */
+        .comments {
+            margin-top: 30px;
+            border-top: 2px solid #333344;
+            padding-top: 25px;
+        }
+
+        .comments h3 {
+            color: #9999FF;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .comment-box {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 2px solid #9999FF;
+            border-radius: 5px;
+            color: #FFFFFF;
+            font-family: inherit;
+            font-size: 1.2rem;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            box-sizing: border-box;
+        }
+
+        /* PANNELLO DI COMANDO SEGRETO PER NUOVI POST */
+        .admin-panel {
+            display: none; 
+            background-color: #050507;
+            border: 1px dashed #444455;
+            padding: 25px;
+            margin-top: 40px;
+            border-radius: 15px;
+            max-width: 1000px;
+            box-sizing: border-box;
+        }
+
+        .admin-panel h2 {
+            color: #555566;
+            margin-top: 0;
+            text-transform: uppercase;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .admin-input {
+            width: 100%;
+            background-color: #111;
+            border: 2px solid #555566;
+            color: white;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* PULSANTI TATTICI */
+        .btn {
+            background-color: #FF9900;
+            color: black;
+            border: none;
+            padding: 11px 30px;
+            font-family: 'Antonio', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.2s;
+            text-transform: uppercase;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .btn:hover { filter: brightness(1.2); }
+        .btn-admin { background-color: #FF6666; color: black; border-radius: 5px; }
+        
+        /* Pulsante Elimina Segreto */
+        .btn-delete {
+            background-color: #FF6666;
+            color: black;
+            font-size: 1rem;
+            padding: 5px 15px;
+            margin-top: 15px;
+            display: none; 
+        }
+
+        /* PIÈ DI PAGINA INTERFACCIA */
+        .footer {
+            margin-top: 40px;
+            color: #444;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-top: 1px solid #222;
+            padding-top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .secret-icon {
+            height: 40px; 
+            width: auto;
+            cursor: pointer;
+            transition: filter 0.3s, transform 0.3s;
+            user-select: none;
+            border-radius: 4px;
+            filter: grayscale(100%) opacity(50%);
+        }
+
+        .secret-icon:hover {
+            filter: grayscale(0%) opacity(100%) brightness(1.2);
+            transform: scale(1.1);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="lcars-left">
+    <div class="lcars-block color-orange">HOME</div>
+    <div class="lcars-block color-purple">ARCHIVE</div>
+    <div class="lcars-block color-yellow">ABOUT ME</div>
+    <div class="lcars-curve-joint"></div>
+</div>
+
+<div class="main-frame">
+    <div class="content">
+        <div class="sub-title">LCARS SUBSPACE JOURNAL • MATRIX INTERFACE</div>
+        <h1>MY PERSONAL BLOG</h1>
+
+        <div id="blog-posts-container">
+            <div style="color: #FFCC33; font-size: 1.5rem; padding: 40px 0;">LCARS CORE: Synchronizing chronological database records...</div>
+        </div>
+
+        <div class="admin-panel" id="adminWrapper">
+            <h2>[SUB-NET OVERRIDE] TRANSMIT NEW JOURNAL POST</h2>
+            <input type="password" id="adminAuth" class="admin-input" placeholder="ENTER AUTH CODE TO UNLOCK TRANSMITTER..." style="max-width: 350px; border-color: #444455;">
+            <div id="adminForm" style="display: none; margin-top: 20px;">
+                <input type="text" id="postTitle" class="admin-input" placeholder="POST TITLE" style="border-color: #FF6666;">
+                <input type="text" id="postStardate" class="admin-input" placeholder="STARDATE" style="max-width: 250px; border-color: #FF6666;">
+                <textarea id="postContent" class="admin-input" rows="6" placeholder="Write log text..." style="text-transform: none; border-color: #FF6666;"></textarea>
+                <button class="btn btn-admin" onclick="publishPost()">Publish to Database</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>LCARS JOURNAL SUB-GRID v4.1 // DATABASE STREAMING ACTIVE // SYSTEM SECURE</div>
+            <img src="TTT_T_40x60.png" alt="Sys Console" class="secret-icon" onclick="toggleAdminPanel()" title="System Console Override">
+        </div>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = "https://dvjtdszdzcdatqextzrz.supabase.co"; 
+    const SUPABASE_KEY = "sb_publishable_y2ndok49LIbaDl7C89aiGg_lABxwt_u";
+    const HASHED_AUTH_CODE = "b128509e66ffb7e2163b2f8a846bfa3fa0f6f0764724068fec58ec40af674f35"; 
+    
+    let isAdminAuthenticated = false;
+
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchPosts();
+
+        document.getElementById('adminAuth').addEventListener('input', async function() {
+            const typedHash = await sha256(this.value.toUpperCase().trim());
+            
+            if (typedHash === HASHED_AUTH_CODE) {
+                isAdminAuthenticated = true;
+                document.getElementById('adminForm').style.display = 'block';
+                document.getElementById('adminWrapper').style.backgroundColor = '#150c0c';
+                document.getElementById('adminWrapper').style.borderColor = '#FF6666';
+                this.style.borderColor = '#00FFCC';
+                this.disabled = true;
+                
+                revealDeleteButtons();
+            }
+        });
+    });
+
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);                    
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function toggleAdminPanel() {
+        const panel = document.getElementById('adminWrapper');
+        if (panel.style.display === 'none' || panel.style.display === '') {
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+
+    function revealDeleteButtons() {
+        if (isAdminAuthenticated) {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            deleteButtons.forEach(btn => btn.style.display = 'block');
+        }
+    }
+
+    async function fetchPosts() {
+        const container = document.getElementById('blog-posts-container');
+        try {
+            const { data, error } = await _supabase
+                .from('blog_posts')
+                .select('*')
+                .order('id', { ascending: false });
+
+            if (error) throw error;
+
+            if (data.length === 0) {
+                container.innerHTML = `<article class="post"><h2>NO POSTS</h2><p>Database empty.</p></article>`;
+                return;
+            }
+
+            container.innerHTML = data.map(post => `
+                <article class="post" id="post-${post.id}">
+                    <h2>${escapeHtml(post.title).toUpperCase()}</h2>
+                    <div class="post-meta">STARDATE ${escapeHtml(post.stardate)}</div>
+                    <p>${escapeHtml(post.content).replace(/\n/g, '<br>')}</p>
+                    <div class="post-footer">
+                        <div class="comments-link">0 comments</div>
+                        <div class="like-container">
+                            <span class="like-count">0</span>
+                            <button class="like-btn" onclick="this.classList.toggle('liked'); let count = this.previousElementSibling; count.textContent = this.classList.contains('liked') ? parseInt(count.textContent) + 1 : parseInt(count.textContent) - 1;">💫</button>
+                        </div>
+                    </div>
+                    <div class="comments">
+                        <h3>COMMENTS</h3>
+                        <textarea class="comment-box" rows="3" placeholder="LEAVE A COMMENT..."></textarea>
+                        <button class="btn">SEND</button>
+                    </div>
+                    <button class="btn btn-delete" onclick="deletePost(${post.id})">DELETE POST</button>
+                </article>
+            `).join('');
+
+            revealDeleteButtons();
+
+        } catch (e) {
+            container.innerHTML = `<div style="color:red; font-size:1.3rem;">CONNECTION ERROR</div>`;
+        }
+    }
+
+    async function publishPost() {
+        const title = document.getElementById('postTitle').value.trim();
+        const stardate = document.getElementById('postStardate').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+
+        if (!title || !stardate || !content) return;
+
+        const { error } = await _supabase.from('blog_posts').insert([{ title, stardate, content }]);
+
+        if (error) alert("ERROR");
+        else {
+            document.getElementById('postTitle').value = "";
+            document.getElementById('postStardate').value = "";
+            document.getElementById('postContent').value = "";
+            document.getElementById('adminAuth').value = "";
+            document.getElementById('adminAuth').disabled = false;
+            document.getElementById('adminForm').style.display = 'none';
+            document.getElementById('adminWrapper').style.display = 'none';
+            fetchPosts();
+        }
+    }
+
+    async function deletePost(postId) {
+        if (!confirm("WARNING: Are you sure you want to purge this record from subspace storage?")) {
+            return;
+        }
+
+        try {
+            const { error } = await _supabase
+                .from('blog_posts')
+                .delete()
+                .eq('id', postId);
+
+            if (error) {
+                alert("PURGE ERROR: Matrix override rejected.");
+            } else {
+                fetchPosts();
+            }
+        } catch (e) {
+            alert("HARDWARE EXCEPTION DURING PURGE.");
+        }
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+</script>
+</body>
+</html>
